@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Spacepoint — Homepage (raw structure)</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 0; padding: 0; line-height: 1.25; background: #000; }
+    header, main, footer { padding: 16px; max-width: 1100px; margin: 0 auto; background: #fff; }
+    header { border-bottom: 1px solid #333; background: #000; color: #fff; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+    .logo { height: 44px; width: auto; }
+    nav a { margin-right: 12px; text-decoration: none; color: #9bd1ff; }
+    nav a:last-child { margin-right: 0; }
+
+    .hero { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 12px; }
+    .hero img { width: 100%; height: auto; display: block; }
+    .hero h1 { margin: 0; font-size: 22px; color: #fff; }
+
+    .tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin: 16px 0; }
+    .tile { border: 1px solid #ddd; padding: 10px; min-height: 56px; }
+
+    .section-title { margin: 22px 0 10px; font-size: 18px; }
+
+    .events { display: grid; grid-template-columns: 1fr; gap: 14px; }
+    .event { border: 1px solid #ddd; padding: 12px; }
+    .event-grid { display: grid; grid-template-columns: 220px 1fr; gap: 12px; align-items: start; }
+    .event img { width: 220px; height: auto; display: block; }
+    .event h3 { margin: 0 0 6px; font-size: 16px; }
+    .muted { color: #555; }
+    header .muted { color: #c9d2dc; }
+
+    footer { border-top: 1px solid #ddd; margin-top: 24px; padding-top: 18px; }
+
+    @media (max-width: 720px) {
+      .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .event-grid { grid-template-columns: 1fr; }
+      .event img { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="topbar">
+    <a href="https://www.spacepoint.org/" aria-label="Spacepoint Home">
+      <img class="logo" src="./images/logo.png" alt="Spacepoint logo" />
+    </a>
+
+    <!-- Primary navigation (from homepage) -->
+    <nav aria-label="Primary">
+      <a href="https://www.spacepoint.org/">Home</a>
+      <a href="https://www.spacepoint.org/events1">Events</a>
+      <a href="https://www.spacepoint.org/ilife-1">Interplanetary Life</a>
+      <a href="https://www.spacepoint.org/copy-of-photo-contests">Experience</a>
+      <a href="https://www.spacepoint.org/team">Mission Team</a>
+      <a href="https://www.spacepoint.org/donate">DONATE</a>
+    </nav>
+  </div>
+
+  <!-- Secondary / dropdown navigation items (captured from the homepage nav) -->
+  <nav aria-label="Secondary" class="muted" style="margin-top:10px;">
+    <a href="https://www.spacepoint.org/upcomingevents">Upcoming Events</a>
+    <a href="https://www.spacepoint.org/recentevents">Recent Events</a>
+    <a href="https://www.spacepoint.org/gravitationalwaves">Astronomy</a>
+    <a href="https://www.spacepoint.org/planetaryscience">Planetary Science</a>
+    <a href="https://www.spacepoint.org/spacemedicine">Space Medicine</a>
+    <a href="https://www.spacepoint.org/aerospace">Aerospace</a>
+    <a href="https://www.spacepoint.org/gspc">Photo Contests</a>
+    <a href="https://www.spacepoint.org/rocketlaunches">Rocket Launches</a>
+    <a href="https://www.spacepoint.org/darkskytours">Dark Sky Tours</a>
+    <a href="https://www.spacepoint.org/scholarships">Scholarships</a>
+    <a href="https://www.spacepoint.org/advisors">Advisors</a>
+  </nav>
+
+  <div class="hero">
+    <img src="./images/hero.jpg" alt="Artemis2R5B02762.jpg" />
+    <h1>Driving Awareness and Participation in Space Exploration</h1>
+  </div>
+</header>
+
+<main>
+  <!-- Tiles/sections as they appear on the homepage -->
+  <div class="tiles" aria-label="Homepage tiles">
+    <div class="tile">Expert Events</div>
+    <div class="tile">Technical Scholarships</div>
+    <div class="tile">International Competition</div>
+    <div class="tile">First Hand Experience</div>
+  </div>
+
+  <h2 class="section-title">Upcoming Events</h2>
+
+  <section class="events" aria-label="Upcoming Events list">
+    <article class="event">
+      <div class="event-grid">
+        <img src="./images/artemis-ii.jpg" alt="Artemis II" />
+        <div>
+          <h3>Artemis II</h3>
+          <div class="muted">Fri, Mar 06  Kennedy Space Center</div>
+          <p><strong>Artemis II Launch</strong></p>
+          <p>No earlier than (NET) March 6, 2026</p>
+          <p>NASA's second space launch system (SLS) launch for the Artemis program to return astronauts to the Moon and Mars</p>
+          <p><a href="https://www.spacepoint.org/event-details-registration/artemis-ii">Details</a></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="event">
+      <div class="event-grid">
+        <img src="./images/starship-12.jpg" alt="Starship 12" />
+        <div>
+          <h3>Starship 12</h3>
+          <div class="muted">Tue, Mar 31  Starbase</div>
+          <p><strong>Starship Test Flight 12</strong></p>
+          <p>Expected to Launch 1Q2026</p>
+          <p><a href="https://www.spacepoint.org/event-details-registration/starship-12">Details</a></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="event">
+      <div class="event-grid">
+        <img src="./images/dark-sky-tour-2026.png" alt="Dark Sky Tour 2026" />
+        <div>
+          <h3>Dark Sky Tour 2026</h3>
+          <div class="muted">Sun, May 17  Yellowstone National Park</div>
+          <p>The Dark Sky Adventure continues in America's original National Park and the Grand Tetons!</p>
+          <p><a href="https://www.spacepoint.org/event-details-registration/dark-sky-tour-2026-1">Details</a></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="event">
+      <div class="event-grid">
+        <img src="./images/interplanetary-life-2026.png" alt="Interplanetary Life 2026" />
+        <div>
+          <h3>Interplanetary Life 2026</h3>
+          <div class="muted">Sat, Sep 26  JUMP! Boise</div>
+          <p>Our Annual Interplanetary Life Event!</p>
+          <p><a href="https://www.spacepoint.org/event-details-registration/interplanetary-life-2026">Details</a></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="event">
+      <div class="event-grid">
+        <img src="./images/lisa.jpg" alt="LISA" />
+        <div>
+          <h3>LISA</h3>
+          <div class="muted">Sat, Feb 07  JUMP! Boise</div>
+          <p>ESA and NASA's new ground breaking Space Based Laser Antenna.</p>
+          <p>A Gravitational Wave Detector the Size of our Sun!</p>
+          <p><a href="https://www.spacepoint.org/event-details-registration/lisa">Details</a></p>
+        </div>
+      </div>
+    </article>
+  </section>
+</main>
+
+<footer>
+  <p>©2023 by Spacepoint 501c(3) | <a href="mailto:info@spacepoint.org">info@spacepoint.org</a></p>
+  <p>Follow Us Now On..</p>
+  <p class="muted">Source: <a href="https://www.spacepoint.org/">https://www.spacepoint.org/</a></p>
+</footer>
+
+</body>
+</html>

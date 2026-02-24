@@ -1,0 +1,632 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Spacepoint — Copy Editor (line breaks only)</title>
+  <style>
+    :root {
+      --bg: #f4f5f7;
+      --paper: rgba(255,255,255,0.92);
+      --card: #ffffff;
+      --ink: #1f2937;
+      --muted: #6b7280;
+      --line: rgba(31,41,55,0.10);
+      --shadow: 0 10px 26px rgba(0,0,0,0.10);
+      --shadow2: 0 22px 55px rgba(0,0,0,0.16);
+      --radius: 18px;
+      --radius2: 14px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--ink);
+      background:
+        radial-gradient(1000px 600px at 20% -10%, rgba(255,255,255,0.90) 0%, rgba(255,255,255,0) 55%),
+        radial-gradient(900px 500px at 85% 0%, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0) 55%),
+        linear-gradient(180deg, #f7f8fb, var(--bg));
+    }
+
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 18px; }
+
+    /* Header / nav (match reference: full-width light bar, two groups) */
+    .siteHeader {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      width: 100%;
+      background: rgba(255,255,255,0.94);
+      border-bottom: 1px solid rgba(31,41,55,0.10);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      backdrop-filter: blur(10px);
+    }
+
+    .headerInner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 16px 52px;
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    @media (max-width: 980px) {
+      .headerInner { padding: 14px 18px; }
+    }
+
+    .brand { display:flex; align-items:center; gap: 12px; }
+    .brand img { height: 44px; width: auto; }
+
+    .brandName {
+      font-size: 19px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 650;
+      color: rgba(31,41,55,0.82);
+      line-height: 1;
+    }
+
+    nav { display:flex; align-items:center; gap: 32px; flex-wrap: wrap; }
+
+    nav a {
+      color: rgba(31,41,55,0.78);
+      text-decoration: none;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(31,41,55,0);
+      transition: border-color 140ms ease, color 140ms ease;
+      font-size: 15px;
+      white-space: nowrap;
+    }
+
+    nav a:hover { color: rgba(31,41,55,0.92); border-bottom-color: rgba(31,41,55,0.32); }
+
+    .chev {
+      display: inline-block;
+      margin-left: 6px;
+      font-size: 11px;
+      color: rgba(31,41,55,0.70);
+      transform: translateY(-1px);
+    }
+
+    .donate {
+      text-decoration: none;
+      color: #fff;
+      font-weight: 800;
+      background: linear-gradient(180deg, #3b4452, #232a35);
+      padding: 9px 16px;
+      border-radius: 999px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.20);
+      border-bottom: none;
+    }
+
+    /* Hero (split layout like reference comps) */
+    .hero {
+      margin-top: 18px;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow2);
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.86);
+    }
+
+    .heroSplit {
+      display: grid;
+      grid-template-columns: 1.05fr 1fr;
+      min-height: 380px;
+    }
+
+    .heroText {
+      padding: 34px 28px;
+      display: grid;
+      align-content: center;
+      gap: 12px;
+      position: relative;
+    }
+
+    .heroText::after {
+      content: "";
+      position: absolute;
+      right: -1px;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: rgba(31,41,55,0.08);
+    }
+
+    .heroKicker {
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(31,41,55,0.55);
+    }
+
+    .heroText h1 {
+      margin: 0;
+      font-size: 38px;
+      line-height: 1.05;
+      letter-spacing: -0.035em;
+    }
+
+    .heroText p { margin: 0; color: rgba(31,41,55,0.72); max-width: 62ch; }
+
+    .ctaRow { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: fit-content;
+      padding: 12px 18px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #3b4452, #232a35);
+      color: #fff;
+      font-weight: 800;
+      border: none;
+    }
+
+    .cta.secondary {
+      background: rgba(31,41,55,0.08);
+      color: rgba(31,41,55,0.88);
+      border: 1px solid rgba(31,41,55,0.12);
+      box-shadow: none;
+    }
+
+    .heroMedia {
+      position: relative;
+      min-height: 380px;
+      background: #000;
+    }
+
+    .heroMedia img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      opacity: 0.96;
+    }
+
+    .heroMedia::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(255,255,255,0.22), rgba(0,0,0,0) 55%);
+      pointer-events: none;
+    }
+
+    /* Sections: banded, with transition motif */
+    .section {
+      position: relative;
+      margin-top: 0;
+      padding: 46px 18px;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+      background: transparent;
+      margin-left: -18px;
+      margin-right: -18px;
+    }
+
+    .section.band-light { background: rgba(255,255,255,0.92); }
+    .section.band-clear { background: transparent; }
+
+    /* sloped transition */
+    .section.slope::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: -22px;
+      height: 22px;
+      background: inherit;
+      transform: skewY(-1.2deg);
+      transform-origin: top left;
+      border-top: 1px solid rgba(31,41,55,0.06);
+      pointer-events: none;
+    }
+
+    .sectionHeader {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .sectionHeader h2 {
+      margin: 0;
+      font-size: 22px;
+      letter-spacing: -0.02em;
+    }
+
+    .subhead { margin: 0; color: var(--muted); max-width: 80ch; }
+
+    .lede { margin: 10px 0 0; max-width: 90ch; color: rgba(31,41,55,0.78); }
+
+    /* Pillars */
+    .grid4 { display:grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 14px; margin-top: 18px; }
+
+    .card {
+      background: var(--card);
+      border: 1px solid rgba(31,41,55,0.10);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+    }
+
+    .cardBody { padding: 14px 14px 16px; }
+    .cardTitle { font-weight: 850; margin: 0; font-size: 16px; }
+    .cardText { margin: 8px 0 0; color: var(--muted); font-size: 13px; }
+
+    /* Programs row (motif from comps: cards with image strip) */
+    .programs {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .pCard {
+      background: var(--card);
+      border: 1px solid rgba(31,41,55,0.10);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 22px rgba(0,0,0,0.10);
+    }
+
+    .pCard img { width: 100%; height: 155px; object-fit: cover; display: block; }
+    .pBody { padding: 12px 14px 14px; }
+    .pTitle { margin: 0; font-weight: 900; }
+    .pMeta { margin: 6px 0 0; color: var(--muted); font-size: 13px; }
+
+    /* Events band (dark) */
+    .band-dark {
+      background: radial-gradient(900px 520px at 50% -30%, rgba(64,102,255,0.18), rgba(0,0,0,0) 55%),
+                  linear-gradient(180deg, #0b0f14, #090c11);
+      color: rgba(255,255,255,0.90);
+    }
+
+    .band-dark .sectionHeader h2,
+    .band-dark .lede { color: rgba(255,255,255,0.92); }
+
+    .band-dark .subhead { color: rgba(255,255,255,0.70); }
+
+    .events { display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 14px; margin-top: 18px; }
+
+    .event {
+      background: #0b0f14;
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 16px 36px rgba(0,0,0,0.20);
+      color: rgba(255,255,255,0.92);
+      position: relative;
+      min-height: 310px;
+    }
+
+    .event img { width: 100%; height: 100%; object-fit: cover; display:block; opacity: 0.86; }
+    .eventOverlay { position:absolute; inset:0; background: linear-gradient(180deg, rgba(0,0,0,0.06), rgba(0,0,0,0.86)); }
+    .eventBody { position:absolute; left: 12px; right: 12px; bottom: 12px; display:grid; gap: 6px; }
+    .eventTitle { font-weight: 900; margin: 0; font-size: 16px; }
+    .eventMeta { color: rgba(255,255,255,0.76); font-size: 13px; }
+    .eventDesc { color: rgba(255,255,255,0.82); font-size: 13px; }
+
+    /* Newsletter motif (centered overlay card) */
+    .newsletter {
+      position: relative;
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid rgba(31,41,55,0.10);
+      box-shadow: var(--shadow2);
+      background: #000;
+      min-height: 320px;
+    }
+
+    .newsletter img { width: 100%; height: 100%; object-fit: cover; display: block; filter: blur(1px); opacity: 0.92; }
+
+    .newsletter::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.45), rgba(0,0,0,0.78));
+    }
+
+    .nlCard {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: min(620px, calc(100% - 28px));
+      background: rgba(15,18,24,0.70);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: 0 26px 80px rgba(0,0,0,0.50);
+      backdrop-filter: blur(10px);
+      color: rgba(255,255,255,0.92);
+    }
+
+    .nlCard h2 { margin: 0; font-size: 22px; letter-spacing: -0.02em; }
+    .nlCard p { margin: 8px 0 0; color: rgba(255,255,255,0.72); }
+
+    .nlForm { margin-top: 14px; display:flex; gap: 10px; flex-wrap: wrap; }
+
+    .nlInput {
+      flex: 1;
+      min-width: 220px;
+      background: rgba(255,255,255,0.92);
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 12px;
+      padding: 10px 12px;
+      color: #111827;
+    }
+
+    .nlBtn {
+      border: 0;
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-weight: 850;
+      background: rgba(255,255,255,0.14);
+      color: rgba(255,255,255,0.92);
+      border: 1px solid rgba(255,255,255,0.18);
+    }
+
+    /* Editing: line breaks only */
+    [data-block-id] {
+      outline: none;
+      cursor: text;
+      white-space: pre-wrap;
+      word-break: break-word;
+      border-radius: 10px;
+      padding: 2px 4px;
+    }
+    [data-block-id]:hover { background: rgba(31,41,55,0.05); }
+    [data-block-id]:focus { background: rgba(31,41,55,0.07); box-shadow: 0 0 0 2px rgba(59,130,246,0.35); }
+
+    .band-dark [data-block-id]:hover { background: rgba(255,255,255,0.06); }
+    .band-dark [data-block-id]:focus { background: rgba(255,255,255,0.08); box-shadow: 0 0 0 2px rgba(155,209,255,0.45); }
+
+    .bottom-pad { height: 260px; }
+
+    /* Footer */
+    footer {
+      margin-top: 0;
+      padding: 28px 18px 18px;
+      color: rgba(107,114,128,0.92);
+      text-align: center;
+      border-top: 1px solid rgba(31,41,55,0.08);
+    }
+
+    .fineprint { font-size: 12px; color: rgba(107,114,128,0.9); }
+
+    @media (max-width: 980px) {
+      .heroSplit { grid-template-columns: 1fr; }
+      .heroText::after { display: none; }
+      .heroMedia { min-height: 240px; }
+      .grid4, .programs, .events { grid-template-columns: 1fr; }
+      .section { padding: 40px 18px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <header class="siteHeader" aria-label="Site header">
+      <div class="headerInner">
+        <div class="brand">
+          <img src="/images/logo.png" alt="Spacepoint logo" />
+          <div class="brandName">SPACEPOINT</div>
+        </div>
+
+        <nav aria-label="Primary">
+          <a href="https://www.spacepoint.org/" target="_blank" rel="noreferrer">Home</a>
+          <a href="https://www.spacepoint.org/events1" target="_blank" rel="noreferrer">Events<span class="chev">▾</span></a>
+          <a href="#" title="Placeholder dropdown">About<span class="chev">▾</span></a>
+          <a href="#" title="Placeholder">Our Mission</a>
+          <a href="#" title="Placeholder">Blog</a>
+          <a class="donate" href="https://www.spacepoint.org/donate" target="_blank" rel="noreferrer">Donate</a>
+        </nav>
+      </div>
+    </header>
+
+    <section class="hero" aria-label="Hero">
+      <div class="heroSplit">
+        <div class="heroText">
+          <div class="heroKicker" data-block-id="home.hero.kicker">Spacepoint</div>
+          <h1 data-block-id="home.hero.title">Driving Awareness and Participation in Space Exploration</h1>
+          <p data-block-id="home.hero.subtitle">Spacepoint brings people closer to space exploration through expert events, hands-on experiences, and technical scholarships.</p>
+          <div class="ctaRow">
+            <button class="cta" type="button">Get Involved</button>
+            <button class="cta secondary" type="button">View Upcoming Events</button>
+          </div>
+        </div>
+        <div class="heroMedia">
+          <img src="/images/hero.jpg" alt="Artemis2R5B02762.jpg" />
+        </div>
+      </div>
+    </section>
+
+    <section class="section band-clear slope" aria-label="Intro">
+      <div class="sectionHeader">
+        <h2 data-block-id="home.intro.title">A simple way to engage with space—together</h2>
+        <p class="subhead" data-block-id="home.intro.subhead">A working draft you can refine with line breaks only—designed to help a copy audit feel like a real homepage.</p>
+      </div>
+      <p class="lede" data-block-id="home.intro.body">Spacepoint is building a community where curiosity turns into participation: learn from experts, join events that make space feel real, and support pathways for the next generation of explorers.</p>
+    </section>
+
+    <section class="section band-light slope" aria-label="What we do">
+      <div class="sectionHeader">
+        <h2 data-block-id="home.whatwedo.title">What we do</h2>
+        <p class="subhead" data-block-id="home.whatwedo.subhead">Four pillars that map to programs, content, and experiences.</p>
+      </div>
+
+      <div class="grid4" aria-label="Pillars">
+        <article class="card"><div class="cardBody">
+          <p class="cardTitle" data-block-id="home.pillars.1.title">Expert Events</p>
+          <p class="cardText" data-block-id="home.pillars.1.body">Talks, launch gatherings, and meetups designed for clarity, questions, and real takeaways.</p>
+        </div></article>
+        <article class="card"><div class="cardBody">
+          <p class="cardTitle" data-block-id="home.pillars.2.title">Technical Scholarships</p>
+          <p class="cardText" data-block-id="home.pillars.2.body">Support for students and builders pursuing aerospace, science, engineering, and space-adjacent careers.</p>
+        </div></article>
+        <article class="card"><div class="cardBody">
+          <p class="cardTitle" data-block-id="home.pillars.3.title">International Competition</p>
+          <p class="cardText" data-block-id="home.pillars.3.body">Global challenges that reward curiosity, craft, and scientific storytelling.</p>
+        </div></article>
+        <article class="card"><div class="cardBody">
+          <p class="cardTitle" data-block-id="home.pillars.4.title">First Hand Experience</p>
+          <p class="cardText" data-block-id="home.pillars.4.body">Trips and on-site experiences that create context, memory, and momentum.</p>
+        </div></article>
+      </div>
+
+      <div class="sectionHeader" style="margin-top: 22px;">
+        <h2 data-block-id="home.programs.title">Programs (examples)</h2>
+        <p class="subhead" data-block-id="home.programs.subhead">A simple row of program cards to make the homepage feel complete.</p>
+      </div>
+
+      <div class="programs" aria-label="Programs">
+        <article class="pCard">
+          <img src="/images/artemis-ii.jpg" alt="Program" />
+          <div class="pBody">
+            <p class="pTitle" data-block-id="home.programs.1.title">Space Shows</p>
+            <p class="pMeta" data-block-id="home.programs.1.desc">Short, high-signal talks that make complex topics feel accessible.</p>
+          </div>
+        </article>
+        <article class="pCard">
+          <img src="/images/starship-12.jpg" alt="Program" />
+          <div class="pBody">
+            <p class="pTitle" data-block-id="home.programs.2.title">Telescope Nights</p>
+            <p class="pMeta" data-block-id="home.programs.2.desc">Hands-on sky viewing and guided context—what you’re seeing and why it matters.</p>
+          </div>
+        </article>
+        <article class="pCard">
+          <img src="/images/dark-sky-tour-2026.png" alt="Program" />
+          <div class="pBody">
+            <p class="pTitle" data-block-id="home.programs.3.title">STEM Workshops</p>
+            <p class="pMeta" data-block-id="home.programs.3.desc">Practical sessions for students and builders: tools, concepts, and next steps.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section band-clear slope" aria-label="Mission">
+      <div class="sectionHeader">
+        <h2 data-block-id="home.mission.title">Mission</h2>
+        <p class="subhead" data-block-id="home.mission.subhead">Why Spacepoint exists and what success looks like.</p>
+      </div>
+      <p class="lede" data-block-id="home.mission.body">Driving awareness and participation in space exploration. We measure success by participation—people showing up, learning, building, and taking the next step toward the space ecosystem.</p>
+      <p class="lede" data-block-id="home.mission.body2">Over time, this becomes a pipeline: inspiration → education → hands-on experience → opportunity.</p>
+    </section>
+
+    <section class="section band-dark slope" aria-label="Upcoming events">
+      <div class="sectionHeader">
+        <h2 data-block-id="home.upcoming.title">Upcoming Events</h2>
+        <p class="subhead" data-block-id="home.upcoming.subhead">Upcoming Events (from the live homepage)</p>
+      </div>
+
+      <div class="events">
+        <article class="event">
+          <img src="/images/artemis-ii.jpg" alt="Artemis II" />
+          <div class="eventOverlay" aria-hidden="true"></div>
+          <div class="eventBody">
+            <p class="eventTitle" data-block-id="home.events.artemis.title">Artemis II</p>
+            <p class="eventMeta" data-block-id="home.events.artemis.meta">Fri, Mar 06 • Kennedy Space Center</p>
+            <p class="eventDesc" data-block-id="home.events.artemis.desc">Artemis II Launch
+No earlier than (NET) March 6, 2026
+NASA's second space launch system (SLS) launch for the Artemis program to return astronauts to the Moon and Mars</p>
+          </div>
+        </article>
+
+        <article class="event">
+          <img src="/images/starship-12.jpg" alt="Starship 12" />
+          <div class="eventOverlay" aria-hidden="true"></div>
+          <div class="eventBody">
+            <p class="eventTitle" data-block-id="home.events.starship.title">Starship 12</p>
+            <p class="eventMeta" data-block-id="home.events.starship.meta">Tue, Mar 31 • Starbase</p>
+            <p class="eventDesc" data-block-id="home.events.starship.desc">Starship Test Flight 12
+Expected to Launch 1Q2026</p>
+          </div>
+        </article>
+
+        <article class="event">
+          <img src="/images/dark-sky-tour-2026.png" alt="Dark Sky Tour 2026" />
+          <div class="eventOverlay" aria-hidden="true"></div>
+          <div class="eventBody">
+            <p class="eventTitle" data-block-id="home.events.darksky.title">Dark Sky Tour 2026</p>
+            <p class="eventMeta" data-block-id="home.events.darksky.meta">Sun, May 17 • Yellowstone National Park</p>
+            <p class="eventDesc" data-block-id="home.events.darksky.desc">The Dark Sky Adventure continues in America's original National Park and the Grand Tetons!</p>
+          </div>
+        </article>
+
+        <article class="event">
+          <img src="/images/interplanetary-life-2026.png" alt="Interplanetary Life 2026" />
+          <div class="eventOverlay" aria-hidden="true"></div>
+          <div class="eventBody">
+            <p class="eventTitle" data-block-id="home.events.ilife.title">Interplanetary Life 2026</p>
+            <p class="eventMeta" data-block-id="home.events.ilife.meta">Sat, Sep 26 • JUMP! Boise</p>
+            <p class="eventDesc" data-block-id="home.events.ilife.desc">Our Annual Interplanetary Life Event!</p>
+          </div>
+        </article>
+
+        <article class="event">
+          <img src="/images/lisa.jpg" alt="LISA" />
+          <div class="eventOverlay" aria-hidden="true"></div>
+          <div class="eventBody">
+            <p class="eventTitle" data-block-id="home.events.lisa.title">LISA</p>
+            <p class="eventMeta" data-block-id="home.events.lisa.meta">Sat, Feb 07 • JUMP! Boise</p>
+            <p class="eventDesc" data-block-id="home.events.lisa.desc">ESA and NASA's new ground breaking Space Based Laser Antenna.
+A Gravitational Wave Detector the Size of our Sun!</p>
+          </div>
+        </article>
+      </div>
+
+      <p class="lede" style="margin-top: 16px; color: rgba(255,255,255,0.70);" data-block-id="home.upcoming.note">(Copy note) In the migration, you might want each event card to have: a one-sentence hook, a clear "Who it's for", and a single CTA.</p>
+    </section>
+
+    <section class="section band-clear slope" aria-label="Newsletter">
+      <div class="sectionHeader">
+        <h2 data-block-id="home.newsletter.title">Stay updated on Spacepoint events</h2>
+        <p class="subhead" data-block-id="home.newsletter.subhead">A lightweight sign-up block (visual motif from your comps).</p>
+      </div>
+
+      <div class="newsletter" aria-label="Newsletter signup mock">
+        <img src="/images/hero.jpg" alt="Background" />
+        <div class="nlCard">
+          <h2 data-block-id="home.newsletter.card.title">Stay Updated on Space Events!</h2>
+          <p data-block-id="home.newsletter.card.body">Get a monthly digest of upcoming Spacepoint programs, new scholarship opportunities, and community highlights.</p>
+          <div class="nlForm" aria-hidden="true">
+            <input class="nlInput" value="Email address" />
+            <button class="nlBtn" type="button">Sign Up</button>
+          </div>
+          <p style="margin-top:10px; font-size:12px; color: rgba(255,255,255,0.62);" data-block-id="home.newsletter.card.fine">(Mock) Form is visual only in this prototype.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section band-light slope" aria-label="Support">
+      <div class="sectionHeader">
+        <h2 data-block-id="home.support.title">Support the mission</h2>
+        <p class="subhead" data-block-id="home.support.subhead">Scholarships, partnerships, and donations keep the flywheel spinning.</p>
+      </div>
+      <p class="lede" data-block-id="home.support.body">If you want to support Spacepoint, consider funding a scholarship, sponsoring an event, or partnering on a program. The goal is more access, more participation, and more momentum.</p>
+      <p class="lede" data-block-id="home.support.body2">This section is a good place to explain what a donation accomplishes ("$25 sends X", "$100 funds Y"), and to add partner logos later.</p>
+    </section>
+
+    <footer>
+      <div data-block-id="site.footer">©2023 by Spacepoint 501c(3)  |  info@spacepoint.org</div>
+      <div class="fineprint" style="margin-top:10px;" data-block-id="site.footer.small">Follow Us Now On..</div>
+    </footer>
+
+    <div class="bottom-pad" aria-hidden="true"></div>
+  </div>
+
+  <script src="/assets/linebreaks-only.js"></script>
+</body>
+</html>

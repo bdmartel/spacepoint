@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Spacepoint — Homepage Copy Editor (simple v2)</title>
+  <style>
+    :root {
+      --bg: #000;
+      --panel: rgba(255,255,255,0.06);
+      --border: rgba(255,255,255,0.16);
+      --text: #fff;
+      --muted: rgba(255,255,255,0.74);
+      --link: #9bd1ff;
+      --shadow: 0 10px 30px rgba(0,0,0,0.45);
+    }
+
+    body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background: var(--bg); color: var(--text); }
+    .wrap { max-width: 1100px; margin: 0 auto; }
+
+    header { border-bottom: 1px solid var(--border); padding: 16px; }
+    main { padding: 16px; }
+    footer { padding: 16px; border-top: 1px solid var(--border); color: var(--muted); }
+
+    nav a { color: var(--link); text-decoration: none; margin-right: 12px; font-weight: 650; }
+
+    .hero { position: relative; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; margin-top: 14px; }
+    .hero img { width: 100%; height: auto; display: block; opacity: 0.9; }
+    .heroOverlay { position:absolute; inset:0; background: linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.84)); }
+    .heroContent { position:absolute; left: 16px; right: 16px; bottom: 14px; display: grid; gap: 8px; max-width: 900px; }
+
+    .tiles { display:grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12px; margin: 18px 0; }
+    .tile { border: 1px solid var(--border); background: var(--panel); border-radius: 12px; padding: 12px; min-height: 70px; }
+
+    .section-title { margin: 26px 0 10px; font-size: 18px; }
+    .kicker { margin: 0 0 14px; color: var(--muted); }
+
+    .events { display:grid; grid-template-columns: 1fr; gap: 14px; }
+    .event { border: 1px solid var(--border); background: var(--panel); border-radius: 14px; padding: 12px; }
+    .eventGrid { display:grid; grid-template-columns: 240px 1fr; gap: 12px; }
+    .event img { width: 240px; height: 160px; object-fit: cover; border-radius: 12px; border: 1px solid var(--border); }
+
+    /* Editable blocks */
+    [data-block-id] { outline: none; cursor: text; }
+    [data-block-id].editing { box-shadow: 0 0 0 2px rgba(155,209,255,0.70); border-radius: 6px; }
+
+    /* Toolbar (fixed, visible, not neurotic) */
+    #wbar {
+      position: fixed;
+      z-index: 9999;
+      left: 16px;
+      right: 16px;
+      bottom: 16px;
+      max-width: 1100px;
+      margin: 0 auto;
+      background: rgba(20,20,20,0.96);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 10px 10px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      box-shadow: var(--shadow);
+    }
+    #wbar button {
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 10px;
+      padding: 8px 10px;
+      cursor: pointer;
+      font-weight: 800;
+    }
+    #wbar .hint { color: var(--muted); font-size: 12px; margin-left: 6px; }
+    #wbar .status { color: var(--muted); font-size: 12px; margin-left: auto; min-width: 90px; text-align: right; }
+
+    @media (max-width: 820px) {
+      .tiles { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .eventGrid { grid-template-columns: 1fr; }
+      .event img { width: 100%; height: auto; }
+      #wbar { left: 10px; right: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;">
+        <img src="/images/logo.png" alt="Spacepoint logo" style="height:44px; width:auto;" />
+        <nav>
+          <a href="#">Home</a>
+          <a href="#">Events</a>
+          <a href="#">Interplanetary Life</a>
+          <a href="#">Experience</a>
+          <a href="#">Mission Team</a>
+          <a href="#">DONATE</a>
+        </nav>
+      </div>
+
+      <div style="margin-top:10px; color:var(--muted); font-size:13px;">
+        Simple editor v2: click text to edit. <strong>Enter</strong> saves (Shift+Enter newline). Cmd/Ctrl+B/I works. Refresh persists edits.
+      </div>
+
+      <div class="hero">
+        <img src="/images/hero.jpg" alt="Hero image" />
+        <div class="heroOverlay" aria-hidden="true"></div>
+        <div class="heroContent">
+          <h1 data-block-id="home.hero.title">Driving Awareness and Participation in Space Exploration</h1>
+          <p data-block-id="home.hero.subtitle" style="margin:0; color:var(--muted);">Programs, events, and experiences designed to connect more people to space exploration—through hands-on learning, expert-led gatherings, and community momentum.</p>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="tiles">
+        <div class="tile">
+          <div style="font-size:12px; color:var(--muted);" data-block-id="home.tiles.1.kicker">What we host</div>
+          <div style="font-size:16px; font-weight:700; margin-top:6px;" data-block-id="home.tiles.1.title">Expert Events</div>
+          <div style="margin-top:6px; color:var(--muted); font-size:13px; line-height:1.35;" data-block-id="home.tiles.1.body">Launch viewings, talks, and meetups with clear takeaways and room to ask real questions.</div>
+        </div>
+        <div class="tile">
+          <div style="font-size:12px; color:var(--muted);" data-block-id="home.tiles.2.kicker">How we support</div>
+          <div style="font-size:16px; font-weight:700; margin-top:6px;" data-block-id="home.tiles.2.title">Technical Scholarships</div>
+          <div style="margin-top:6px; color:var(--muted); font-size:13px; line-height:1.35;" data-block-id="home.tiles.2.body">Lowering barriers so more people can pursue aerospace, science, and engineering pathways.</div>
+        </div>
+        <div class="tile">
+          <div style="font-size:12px; color:var(--muted);" data-block-id="home.tiles.3.kicker">How we challenge</div>
+          <div style="font-size:16px; font-weight:700; margin-top:6px;" data-block-id="home.tiles.3.title">International Competition</div>
+          <div style="margin-top:6px; color:var(--muted); font-size:13px; line-height:1.35;" data-block-id="home.tiles.3.body">Friendly, global formats that reward curiosity, craft, and scientific storytelling.</div>
+        </div>
+        <div class="tile">
+          <div style="font-size:12px; color:var(--muted);" data-block-id="home.tiles.4.kicker">How we immerse</div>
+          <div style="font-size:16px; font-weight:700; margin-top:6px;" data-block-id="home.tiles.4.title">First Hand Experience</div>
+          <div style="margin-top:6px; color:var(--muted); font-size:13px; line-height:1.35;" data-block-id="home.tiles.4.body">Trips and on-site experiences—built for memory, context, and real-world inspiration.</div>
+        </div>
+      </div>
+
+      <h2 class="section-title" data-block-id="home.upcoming.title">Upcoming Events</h2>
+      <p class="kicker" data-block-id="home.upcoming.kicker">Cards below are laid out as image + details, matching the homepage order.</p>
+
+      <section class="events">
+        <article class="event">
+          <div class="eventGrid">
+            <img src="/images/artemis-ii.jpg" alt="Artemis II" />
+            <div>
+              <h3 style="margin:0 0 6px;" data-block-id="home.events.artemis.name">Artemis II</h3>
+              <div style="color:var(--muted);" data-block-id="home.events.artemis.meta">Fri, Mar 06 • Kennedy Space Center</div>
+              <p style="margin:10px 0 0; font-weight:700;" data-block-id="home.events.artemis.headline">Artemis II Launch</p>
+              <p style="margin:8px 0 0;" data-block-id="home.events.artemis.when">No earlier than (NET) March 6, 2026</p>
+              <p style="margin:8px 0 0;" data-block-id="home.events.artemis.desc">NASA's second space launch system (SLS) launch for the Artemis program to return astronauts to the Moon and Mars</p>
+              <p style="margin:8px 0 0;"><a href="https://www.spacepoint.org/event-details-registration/artemis-ii" target="_blank" rel="noreferrer">Details</a></p>
+            </div>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <footer>
+      <div data-block-id="site.footer">©2023 by Spacepoint 501c(3) | info@spacepoint.org</div>
+      <div style="margin-top:8px;" data-block-id="site.follow">Follow Us Now On..</div>
+    </footer>
+  </div>
+
+  <div id="wbar" hidden>
+    <button id="bBold" title="Bold">Bold</button>
+    <button id="bItalic" title="Italic">Italic</button>
+    <button id="bLink" title="Link">Link</button>
+    <button id="bClear" title="Clear formatting">Clear</button>
+    <button id="bDone" title="Done">Done</button>
+    <div class="hint">Enter=save · Shift+Enter=new line</div>
+    <div class="status" id="saveStatus"></div>
+  </div>
+
+  <script src="/assets/editor-v2.js"></script>
+</body>
+</html>
