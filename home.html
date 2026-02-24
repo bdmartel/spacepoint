@@ -572,46 +572,7 @@
         text-transform: uppercase;
         color: #fff;
         max-width: 640px;
-        opacity: 0;
-      }
-      /* ── Futuristic typewriter ── */
-      .hu-h1.tw-ready { opacity: 1; }
-      .hu-h1 .tw-char {
-        opacity: 0;
-        display: inline;
-      }
-      .hu-h1 .tw-char.tw-vis {
-        opacity: 1;
-        animation: tw-glow 0.35s ease-out forwards;
-      }
-      .hu-h1 .tw-cursor {
-        display: inline-block;
-        width: 3px;
-        height: 0.82em;
-        background: #6fdfff;
-        box-shadow: 0 0 10px #6fdfff, 0 0 25px rgba(111,223,255,0.35);
-        margin-left: 2px;
-        vertical-align: baseline;
-        position: relative;
-        top: 0.08em;
-        border-radius: 1px;
-        animation: tw-blink 0.65s step-end infinite;
-      }
-      .hu-h1 .tw-cursor.tw-done {
-        animation: tw-fade-out 0.5s 0.5s ease-out forwards;
-      }
-      @keyframes tw-glow {
-        0%   { color: #6fdfff; text-shadow: 0 0 14px #6fdfff, 0 0 30px rgba(111,223,255,0.3); }
-        60%  { color: #c3eeff; text-shadow: 0 0 6px rgba(111,223,255,0.15); }
-        100% { color: #fff; text-shadow: none; }
-      }
-      @keyframes tw-blink {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0; }
-      }
-      @keyframes tw-fade-out {
-        from { opacity: 1; }
-        to   { opacity: 0; }
+        animation: hu-fade-up 0.8s cubic-bezier(0.22,1,0.36,1) 0.32s both;
       }
       .hu-sub {
         margin: 0;
@@ -619,20 +580,14 @@
         line-height: 1.65;
         color: rgba(255,255,255,0.55);
         max-width: 420px;
-        opacity: 0;
-      }
-      .hu-body.tw-complete .hu-sub {
-        animation: hu-fade-up 0.8s cubic-bezier(0.22,1,0.36,1) both;
+        animation: hu-fade-up 0.8s cubic-bezier(0.22,1,0.36,1) 0.42s both;
       }
       .hu-ctas {
         display: flex;
         gap: 12px;
         flex-wrap: nowrap;
         margin-top: 8px;
-        opacity: 0;
-      }
-      .hu-body.tw-complete .hu-ctas {
-        animation: hu-fade-up 0.8s cubic-bezier(0.22,1,0.36,1) 0.12s both;
+        animation: hu-fade-up 0.8s cubic-bezier(0.22,1,0.36,1) 0.52s both;
       }
       .hu-btn-primary {
         display: inline-flex; align-items: center;
@@ -2435,47 +2390,6 @@
       fwBtn.addEventListener('click', function(){
         applyFullWidth(!hero.classList.contains('ab-fullwidth'));
       });
-    })();
-
-    // ── Futuristic typewriter for hero headline ──
-    (function(){
-      var h1 = document.querySelector('.hu-h1');
-      if (!h1) return;
-
-      var text = h1.textContent.trim();
-      h1.textContent = '';
-
-      // add blinking cursor first — chars get inserted before it
-      var cursor = document.createElement('span');
-      cursor.className = 'tw-cursor';
-      cursor.textContent = '\u200B';
-      h1.appendChild(cursor);
-
-      h1.classList.add('tw-ready');
-
-      var idx = 0;
-      var baseDelay = 38;
-      var startDelay = 400;
-
-      function typeNext() {
-        if (idx >= text.length) {
-          cursor.classList.add('tw-done');
-          var body = h1.closest('.hu-body');
-          if (body) body.classList.add('tw-complete');
-          return;
-        }
-        var ch = text[idx];
-        var sp = document.createElement('span');
-        sp.className = 'tw-char tw-vis';
-        sp.textContent = ch;
-        h1.insertBefore(sp, cursor);
-        idx++;
-
-        var next = (ch === ' ') ? 8 : baseDelay + Math.floor(Math.random() * 24 - 8);
-        setTimeout(typeNext, next);
-      }
-
-      setTimeout(typeNext, startDelay);
     })();
   </script>
 
