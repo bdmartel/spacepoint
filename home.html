@@ -582,7 +582,7 @@
       }
       .hu-h1 .tw-char.tw-vis {
         opacity: 1;
-        animation: tw-glow 0.35s ease-out forwards;
+        animation: tw-glow 0.2s ease-out forwards;
       }
       .hu-h1 .tw-cursor {
         display: inline-block;
@@ -2443,9 +2443,11 @@
       if (!h1) return;
 
       var text = h1.textContent.trim();
+
+      // lock height so layout doesn't shift as lines appear
+      h1.style.minHeight = h1.offsetHeight + 'px';
       h1.textContent = '';
 
-      // add blinking cursor first — chars get inserted before it
       var cursor = document.createElement('span');
       cursor.className = 'tw-cursor';
       cursor.textContent = '\u200B';
@@ -2454,12 +2456,13 @@
       h1.classList.add('tw-ready');
 
       var idx = 0;
-      var baseDelay = 38;
-      var startDelay = 400;
+      var baseDelay = 18;
+      var startDelay = 200;
 
       function typeNext() {
         if (idx >= text.length) {
           cursor.classList.add('tw-done');
+          h1.style.minHeight = '';
           var body = h1.closest('.hu-body');
           if (body) body.classList.add('tw-complete');
           return;
@@ -2471,7 +2474,7 @@
         h1.insertBefore(sp, cursor);
         idx++;
 
-        var next = (ch === ' ') ? 8 : baseDelay + Math.floor(Math.random() * 24 - 8);
+        var next = (ch === ' ') ? 3 : baseDelay + Math.floor(Math.random() * 10 - 3);
         setTimeout(typeNext, next);
       }
 
