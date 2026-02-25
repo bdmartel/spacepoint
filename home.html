@@ -945,9 +945,9 @@
         background-size: cover;
         background-position: center;
       }
-      .evcard.e1 .img { background-image: linear-gradient(to bottom, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.18) 50%, rgba(0,0,0,0.76) 100%), url("images/homepage-artemis-ii.jpg"); }
-      .evcard.e2 .img { background-image: linear-gradient(to bottom, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.18) 50%, rgba(0,0,0,0.76) 100%), url("images/homepage-starship-12.jpg"); }
-      .evcard.e3 .img { background-image: linear-gradient(to bottom, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.18) 50%, rgba(0,0,0,0.76) 100%), url("images/homepage-dark-sky-tour-2026.png"); }
+      .evcard.e1 .img { background-image: linear-gradient(to bottom, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.18) 50%, rgba(0,0,0,0.76) 100%), url("images/homepage-roman-space-telescope.jpg"); }
+      .evcard.e2 .img { background-image: linear-gradient(to bottom, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.18) 50%, rgba(0,0,0,0.76) 100%), url("images/homepage-artemis-ii.jpg"); }
+      .evcard.e3 .img { background-image: linear-gradient(to bottom, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.18) 50%, rgba(0,0,0,0.76) 100%), url("images/homepage-starship-12.jpg"); }
       .evcard.e4 .img { background-image: linear-gradient(to bottom, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.18) 50%, rgba(0,0,0,0.76) 100%), url("images/homepage-interplanetary-life-2026.png"); }
       .evcard.e5 .img { background-image: linear-gradient(to bottom, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.18) 50%, rgba(0,0,0,0.76) 100%), url("images/homepage-lisa.jpg"); }
 
@@ -1073,6 +1073,10 @@
         box-shadow: 0 0 9px rgba(255,55,55,0.90);
         animation: ev-dot-pulse 1.8s ease-in-out infinite;
         flex-shrink: 0;
+      }
+      .ev-badge-dot--new {
+        background: #4fc3ff;
+        box-shadow: 0 0 9px rgba(79,195,255,0.90);
       }
       @keyframes ev-dot-pulse {
         0%, 100% { opacity: 1; transform: scale(1); }
@@ -1745,7 +1749,23 @@
         <div class="viewport">
           <div class="track" role="list" aria-label="Event cards" data-track>
 
-            <article class="evcard e1 featured" role="listitem" aria-label="Artemis II">
+            <article class="evcard e1 featured" role="listitem" aria-label="Roman Space Telescope Launch">
+              <div class="img" aria-hidden="true"></div>
+              <div class="ev-type">Launch Watch</div>
+              <div class="date" aria-label="September 30, 2026">
+                <div class="m">Sep</div>
+                <div class="d">30</div>
+                <div class="y">2026</div>
+              </div>
+              <div class="ev-badge"><span class="ev-badge-dot ev-badge-dot--new"></span>Just Added</div>
+              <div class="content">
+                <h3>Roman Space Telescope</h3>
+                <p class="loc">Kennedy Space Center</p>
+                <a class="cta" href="https://www.spacepoint.org/event-details-registration/roman-space-telescope-launch" rel="noreferrer">Details</a>
+              </div>
+            </article>
+
+            <article class="evcard e2" role="listitem" aria-label="Artemis II">
               <div class="img" aria-hidden="true"></div>
               <div class="ev-type">Launch Watch</div>
               <div class="date" aria-label="March 6, 2026">
@@ -1753,16 +1773,14 @@
                 <div class="d">06</div>
                 <div class="y">2026</div>
               </div>
-              <div class="ev-badge"><span class="ev-badge-dot"></span>Next Up</div>
               <div class="content">
                 <h3>Artemis II</h3>
                 <p class="loc">Kennedy Space Center</p>
-                <div class="ev-countdown" data-target="2026-03-06T09:00:00">—</div>
                 <a class="cta" href="https://www.spacepoint.org/event-details-registration/artemis-ii" rel="noreferrer">Details</a>
               </div>
             </article>
 
-            <article class="evcard e2" role="listitem" aria-label="Starship 12">
+            <article class="evcard e3" role="listitem" aria-label="Starship 12">
               <div class="img" aria-hidden="true"></div>
               <div class="ev-type">Launch Watch</div>
               <div class="date" aria-label="March 31, 2026">
@@ -1774,21 +1792,6 @@
                 <h3>Starship 12</h3>
                 <p class="loc">Starbase</p>
                 <a class="cta" href="https://www.spacepoint.org/event-details-registration/starship-12" rel="noreferrer">Details</a>
-              </div>
-            </article>
-
-            <article class="evcard e3" role="listitem" aria-label="Dark Sky Tour 2026">
-              <div class="img" aria-hidden="true"></div>
-              <div class="ev-type">Dark Sky</div>
-              <div class="date" aria-label="May 17, 2026">
-                <div class="m">May</div>
-                <div class="d">17</div>
-                <div class="y">2026</div>
-              </div>
-              <div class="content">
-                <h3>Dark Sky Tour 2026</h3>
-                <p class="loc">Yellowstone National Park</p>
-                <a class="cta" href="https://www.spacepoint.org/event-details-registration/dark-sky-tour-2026-1" rel="noreferrer">Details</a>
               </div>
             </article>
 
