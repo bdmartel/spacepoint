@@ -19,3 +19,14 @@ jobs:
             cd /var/www/spacepoint-homepage
             git pull origin main
             sudo systemctl restart nginx
+            echo "--- nginx status ---"
+            sudo systemctl status nginx
+            echo "--- nginx config test ---"
+            sudo nginx -t
+            echo "--- listening ports ---"
+            sudo ss -tlnp | grep -E ':(80|443)\s'
+            echo "--- ufw status ---"
+            sudo ufw status 2>/dev/null || echo "ufw not installed"
+            echo "--- nginx sites ---"
+            ls /etc/nginx/sites-enabled/
+            cat /etc/nginx/sites-enabled/*
